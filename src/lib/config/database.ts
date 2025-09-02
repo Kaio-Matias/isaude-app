@@ -1,8 +1,6 @@
 import 'reflect-metadata';
 import { DataSource } from 'typeorm';
-import * as entities from '@/lib/entities';
-
-let dataSource: DataSource;
+import * as entities from '../entities/index';
 
 const AppDataSource = new DataSource({
   type: 'postgres',
@@ -12,13 +10,21 @@ const AppDataSource = new DataSource({
   password: process.env.DB_PASS,
   database: process.env.DB_NAME,
   entities: Object.values(entities),
-  synchronize: process.env.NODE_ENV !== 'production',
+  synchronize: false,
+  migrations: ['src/database/migrations/*{.ts,.js}'],
+  migrationsTableName: 'migrations',
 });
 
-export async function getDataSource(): Promise<DataSource> {
-  if (dataSource && dataSource.isInitialized) {
-    return dataSource;
-  }
-  dataSource = await AppDataSource.initialize();
-  return dataSource;
-}
+// Inicializa a fonte de dados uma única vez e exporta a instância inicializada
+const dataSource = AppDataSource.initialize().catch((err) => {
+  console.error("Erro ao inicializar a fonte de dados", err);
+});
+
+export default {
+    getInstance: async () => {
+        if (!AppDataSource.isInitialized) {
+            await dataSource;
+        }
+        return AppDataSource;
+    }
+};

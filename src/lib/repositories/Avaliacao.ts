@@ -1,10 +1,10 @@
-import { Repository, FindOptionsWhere } from 'typeorm';
-import { getDataSource } from '@/lib/config/database';
+import { Repository, FindOptionsWhere, DeepPartial } from 'typeorm';
+import database from '@/lib/config/database'; // Caminho corrigido
 import { Avaliacao } from '@/lib/entities';
 
 export class AvaliacaoRepository {
   private async getRepo(): Promise<Repository<Avaliacao>> {
-    const dataSource = await getDataSource();
+    const dataSource = await database.getInstance();
     return dataSource.getRepository(Avaliacao);
   }
 

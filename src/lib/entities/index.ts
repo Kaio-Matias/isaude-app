@@ -1,29 +1,13 @@
-import { AgendamentoConsulta } from './AgendamentoConsulta';
-import { Avaliacao } from './Avaliacao';
-import { Clinic } from './Clinic';
-import { ClinicExam } from './ClinicExam';
-import { ClinicPromotion } from './ClinicPromocao';
-import { ConexaoProfissionalClinica } from './ConexaoProfissionalClinica';
-import { Contato } from './Contato';
-import { Documento } from './Documento';
-import { Endereco } from './Endereco';
-import { ExamAgendamento } from './ExamAgendamento';
-import { ExamPayment } from './ExamPayment';
-import { User } from './User';
-import { UsuariosContatos } from './UsuariosContatos';
-
-export {
-  AgendamentoConsulta,
-  Avaliacao,
-  Clinic,
-  ClinicExam,
-  ClinicPromotion,
-  ConexaoProfissionalClinica,
-  Contato,
-  Documento,
-  Endereco,
-  ExamAgendamento,
-  ExamPayment,
-  User,
-  UsuariosContatos,
-};
+export * from './AgendamentoConsulta';
+export * from './Avaliacao';
+export * from './Clinic';
+export * from './ClinicExam';
+export * from './ClinicPromocao';
+export * from './ConexaoProfissionalClinica';
+export * from './Contato';
+export * from './Documento';
+export * from './Endereco';
+export * from './ExamAgendamento';
+export * from './ExamPayment';
+export * from './User';
+export * from './UsuariosContatos';

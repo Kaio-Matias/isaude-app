@@ -1,10 +1,10 @@
 import { Repository } from 'typeorm';
-import { getDataSource } from '@/lib/config/database';
+import database from '@/lib/config/database'; // Caminho corrigido
 import { UsuariosContatos, User, Contato } from '@/lib/entities';
 
 export class UserContactRepository {
   private async getRepo(): Promise<Repository<UsuariosContatos>> {
-    const dataSource = await getDataSource();
+    const dataSource = await database.getInstance();
     return dataSource.getRepository(UsuariosContatos);
   }
 

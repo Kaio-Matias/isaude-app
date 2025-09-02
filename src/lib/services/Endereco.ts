@@ -1,6 +1,7 @@
 import { EnderecoRepository, ClinicRepository } from '@/lib/repositories';
 import { IEndereco } from '@/lib/interfaces';
-import { Endereco } from '@/lib/entities';
+import { Endereco, Clinic } from '@/lib/entities';
+import { DeepPartial } from 'typeorm';
 
 export class EnderecoService {
   private repository: EnderecoRepository;
@@ -16,16 +17,18 @@ export class EnderecoService {
       throw new Error("Campos obrigatórios para adicionar endereço estão faltando.");
     }
 
-    // A CORREÇÃO ESTÁ AQUI
     const clinic = await this.clinicRepository.findById(data.id_clinica);
     if (!clinic) {
       throw new Error("Clínica não encontrada para associar o endereço.");
     }
     
-    const enderecoData = { ...data, clinic };
-    
-    // A CORREÇÃO ESTÁ AQUI
-    return this.repository.save(enderecoData as Partial<Endereco>);
+    const enderecoData = { ...data, clinica: clinic };
+
+    return this.repository.save(enderecoData as DeepPartial<Endereco>);
+  }
+
+  async getEnderecosByClinic(clinicId: number): Promise<Endereco[]> {
+    return this.repository.findByQuery({ clinica: { id_clinica: clinicId } });
   }
 
   async deleteEndereco(id: number): Promise<boolean> {

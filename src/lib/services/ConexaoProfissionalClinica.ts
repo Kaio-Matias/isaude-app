@@ -20,7 +20,13 @@ export class ConexaoProfissionalClinicaService {
     const clinica = await this.clinicRepository.findById(data.id_clinica);
     if (!clinica) throw new Error("Clínica não encontrada.");
 
-    const conexaoData = { ...data, profissional, clinica };
+    const conexaoData = { 
+      ...data, 
+      profissional, 
+      clinica, 
+      data_aceite: data.data_aceite === null ? undefined : data.data_aceite,
+      mensagem: data.mensagem === null ? undefined : data.mensagem
+    };
     return this.repository.save(conexaoData);
   }
 

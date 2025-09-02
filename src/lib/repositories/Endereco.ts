@@ -1,10 +1,10 @@
 import { Repository, FindOptionsWhere, DeepPartial } from 'typeorm';
-import { getDataSource } from '@/lib/config/database';
+import database from '@/lib/config/database'; // Caminho corrigido
 import { Endereco } from '@/lib/entities';
 
 export class EnderecoRepository {
   private async getRepo(): Promise<Repository<Endereco>> {
-    const dataSource = await getDataSource();
+    const dataSource = await database.getInstance();
     return dataSource.getRepository(Endereco);
   }
 

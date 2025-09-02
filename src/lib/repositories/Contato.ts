@@ -1,11 +1,11 @@
 import { Repository, FindOptionsWhere } from 'typeorm';
-import { getDataSource } from '@/lib/config/database';
+import database from '@/lib/config/database'; // Caminho corrigido
 import { Contato, User } from '@/lib/entities';
 import { IContato } from '@/lib/interfaces';
 
 export class ContatoRepository {
   private async getRepo(): Promise<Repository<Contato>> {
-    const dataSource = await getDataSource();
+    const dataSource = await database.getInstance();
     return dataSource.getRepository(Contato);
   }
 
