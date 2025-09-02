@@ -1,10 +1,11 @@
+// FILE: src/app/api/contato/router.ts
 import { NextResponse } from 'next/server';
 import { UserContactService } from '@/lib/services/UserContact';
-import { getDataSource } from '@/lib/config/database';
+import database from '@/lib/config/database';
 
 export async function POST(request: Request) {
   try {
-    await getDataSource();
+    await database.getInstance();
     const body = await request.json();
     const contactService = new UserContactService();
     const newContact = await contactService.createContact(body);
@@ -13,3 +14,4 @@ export async function POST(request: Request) {
     return NextResponse.json({ message: error.message }, { status: 500 });
   }
 }
+

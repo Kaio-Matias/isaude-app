@@ -1,10 +1,11 @@
+// FILE: src/app/api/clinic/route.ts
 import { NextResponse } from 'next/server';
 import { ClinicService } from '@/lib/services/Clinic';
-import { getDataSource } from '@/lib/config/database';
+import database from '@/lib/config/database';
 
 export async function POST(request: Request) {
   try {
-    await getDataSource();
+    await database.getInstance();
     const body = await request.json();
     const clinicService = new ClinicService();
     const newClinic = await clinicService.createClinic(body);
@@ -16,7 +17,7 @@ export async function POST(request: Request) {
 
 export async function GET(request: Request) {
     try {
-        await getDataSource();
+        await database.getInstance();
         const clinicService = new ClinicService();
         const clinics = await clinicService.getClinics({});
         return NextResponse.json(clinics);
@@ -24,3 +25,4 @@ export async function GET(request: Request) {
         return NextResponse.json({ message: 'Erro interno do servidor.' }, { status: 500 });
     }
 }
+

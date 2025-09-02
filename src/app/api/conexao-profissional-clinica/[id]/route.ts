@@ -1,6 +1,7 @@
+// FILE: src/app/api/conexao-profissional-clinica/[id]/route.ts
 import { NextResponse } from 'next/server';
 import { ConexaoProfissionalClinicaService } from '@/lib/services/ConexaoProfissionalClinica';
-import { getDataSource } from '@/lib/config/database';
+import database from '@/lib/config/database';
 
 interface Params {
   params: { id: string };
@@ -8,7 +9,7 @@ interface Params {
 
 export async function PUT(request: Request, { params }: Params) {
     try {
-        await getDataSource();
+        await database.getInstance();
         const id = parseInt(params.id, 10);
         const { status } = await request.json();
         const conexaoService = new ConexaoProfissionalClinicaService();
@@ -23,3 +24,4 @@ export async function PUT(request: Request, { params }: Params) {
         return NextResponse.json({ message: 'Erro interno do servidor.' }, { status: 500 });
     }
 }
+

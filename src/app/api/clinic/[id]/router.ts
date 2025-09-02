@@ -1,6 +1,7 @@
+// FILE: src/app/api/clinic/[id]/router.ts
 import { NextResponse } from 'next/server';
 import { ClinicService } from '@/lib/services/Clinic';
-import { getDataSource } from '@/lib/config/database';
+import database from '@/lib/config/database';
 
 interface Params {
   params: { id: string };
@@ -8,7 +9,7 @@ interface Params {
 
 export async function GET(request: Request, { params }: Params) {
   try {
-    await getDataSource();
+    await database.getInstance();
     const id = parseInt(params.id, 10);
     const clinicService = new ClinicService();
     const clinic = await clinicService.getClinics({ id });
@@ -25,7 +26,7 @@ export async function GET(request: Request, { params }: Params) {
 
 export async function PUT(request: Request, { params }: Params) {
     try {
-        await getDataSource();
+        await database.getInstance();
         const id = parseInt(params.id, 10);
         const body = await request.json();
         const clinicService = new ClinicService();
@@ -43,7 +44,7 @@ export async function PUT(request: Request, { params }: Params) {
 
 export async function DELETE(request: Request, { params }: Params) {
     try {
-        await getDataSource();
+        await database.getInstance();
         const id = parseInt(params.id, 10);
         const clinicService = new ClinicService();
         const success = await clinicService.deleteClinic(id);
@@ -57,3 +58,4 @@ export async function DELETE(request: Request, { params }: Params) {
         return NextResponse.json({ message: error.message }, { status: 500 });
     }
 }
+

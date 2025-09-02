@@ -1,10 +1,10 @@
 import { NextResponse } from 'next/server';
 import { ClinicPromocaoService } from '@/lib/services/ClinicPromocao';
-import { getDataSource } from '@/lib/config/database';
+import database from '@/lib/config/database';
 
 export async function POST(request: Request) {
   try {
-    await getDataSource();
+    await database.getInstance();
     const body = await request.json();
     const promocaoService = new ClinicPromocaoService();
     const newPromocao = await promocaoService.createPromocao(body);
