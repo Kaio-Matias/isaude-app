@@ -3,17 +3,18 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+// FILE: src/database/generate-migration.ts
 require("dotenv/config");
 const typeorm_1 = require("typeorm");
 const database_1 = __importDefault(require("../lib/config/database"));
 async function generate() {
     console.log('A inicializar a fonte de dados para gerar a migração...');
-    // Inicializa a fonte de dados para ler as entidades
-    await database_1.default.initialize();
+    // CORREÇÃO: Obtém a instância do DataSource corretamente
+    const AppDataSource = await database_1.default.getInstance();
     console.log('Fonte de dados inicializada.');
     // Cria uma nova instância de DataSource apenas para a geração da migração
     const generationDataSource = new typeorm_1.DataSource({
-        ...database_1.default.options,
+        ...AppDataSource.options,
         migrations: ['src/database/migrations/*{.ts,.js}'],
     });
     console.log('A gerar a migração...');
@@ -27,7 +28,7 @@ async function generate() {
     console.log('Isto significa que todas as tabelas foram criadas.');
     console.log('Pode agora apagar este ficheiro e continuar o desenvolvimento.');
     console.log('--------------------------------------------------');
-    await database_1.default.destroy();
+    await AppDataSource.destroy();
 }
 generate().catch(error => {
     console.error('Ocorreu um erro:', error);

@@ -1,8 +1,10 @@
+// FILE: src/lib/config/database.ts
 import 'reflect-metadata';
 import { DataSource } from 'typeorm';
 import * as entities from '../entities/index';
 
-const AppDataSource = new DataSource({
+// Esta instância é exportada diretamente para que o TypeORM CLI a possa encontrar.
+export const AppDataSource = new DataSource({
   type: 'postgres',
   host: process.env.DB_HOST,
   port: parseInt(process.env.DB_PORT || '5432', 10),
@@ -15,16 +17,16 @@ const AppDataSource = new DataSource({
   migrationsTableName: 'migrations',
 });
 
-// Inicializa a fonte de dados uma única vez e exporta a instância inicializada
-const dataSource = AppDataSource.initialize().catch((err) => {
-  console.error("Erro ao inicializar a fonte de dados", err);
-});
-
-export default {
-    getInstance: async () => {
+// Mantemos este padrão para o resto da sua aplicação não precisar de alterações.
+const database = {
+    getInstance: async (): Promise<DataSource> => {
         if (!AppDataSource.isInitialized) {
-            await dataSource;
+            await AppDataSource.initialize().catch((err) => {
+              console.error("Erro ao inicializar a fonte de dados", err);
+            });
         }
         return AppDataSource;
     }
 };
+
+export default database;

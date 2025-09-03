@@ -8,9 +8,9 @@
     "start": "next start",
     "lint": "next lint",
     "build:cli": "tsc -p tsconfig.cli.json",
-    "typeorm": "node -r dotenv/config -r tsconfig-paths/register ./dist-cli/lib/config/database.js",
-    "migration:run": "npm run build:cli && typeorm-ts-node-commonjs -d dist-cli/lib/config/database.js migration:run",
-    "migration:generate": "npm run build:cli && typeorm-ts-node-commonjs -d src/lib/config/database.ts migration:generate"
+    "typeorm": "node -r dotenv/config ./node_modules/typeorm/cli.js -d dist-cli/lib/config/database.js",
+    "migration:run": "npm run build:cli && node -r dotenv/config ./node_modules/typeorm/cli.js -d dist-cli/lib/config/database.js migration:run",
+    "migration:generate": "npm run build:cli && node -r dotenv/config ./node_modules/typeorm/cli.js -d dist-cli/lib/config/database.js migration:generate"
   },
   "dependencies": {
     "@google-cloud/storage": "^7.16.0",

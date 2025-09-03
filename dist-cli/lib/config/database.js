@@ -33,10 +33,13 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.AppDataSource = void 0;
+// FILE: src/lib/config/database.ts
 require("reflect-metadata");
 const typeorm_1 = require("typeorm");
 const entities = __importStar(require("../entities/index"));
-const AppDataSource = new typeorm_1.DataSource({
+// Esta instância é exportada diretamente para que o TypeORM CLI a possa encontrar.
+exports.AppDataSource = new typeorm_1.DataSource({
     type: 'postgres',
     host: process.env.DB_HOST,
     port: parseInt(process.env.DB_PORT || '5432', 10),
@@ -48,5 +51,16 @@ const AppDataSource = new typeorm_1.DataSource({
     migrations: ['src/database/migrations/*{.ts,.js}'],
     migrationsTableName: 'migrations',
 });
-exports.default = AppDataSource;
+// Mantemos este padrão para o resto da sua aplicação não precisar de alterações.
+const database = {
+    getInstance: async () => {
+        if (!exports.AppDataSource.isInitialized) {
+            await exports.AppDataSource.initialize().catch((err) => {
+                console.error("Erro ao inicializar a fonte de dados", err);
+            });
+        }
+        return exports.AppDataSource;
+    }
+};
+exports.default = database;
 //# sourceMappingURL=database.js.map

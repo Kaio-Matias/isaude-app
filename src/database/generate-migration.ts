@@ -1,12 +1,13 @@
+// FILE: src/database/generate-migration.ts
 import 'dotenv/config';
 import { DataSource } from 'typeorm';
-import AppDataSource from '../lib/config/database';
+import database from '../lib/config/database';
 
 async function generate() {
   console.log('A inicializar a fonte de dados para gerar a migração...');
   
-  // Inicializa a fonte de dados para ler as entidades
-  await AppDataSource.initialize();
+  // CORREÇÃO: Obtém a instância do DataSource corretamente
+  const AppDataSource = await database.getInstance();
   console.log('Fonte de dados inicializada.');
 
   // Cria uma nova instância de DataSource apenas para a geração da migração
@@ -36,3 +37,4 @@ generate().catch(error => {
   console.error('Ocorreu um erro:', error);
   process.exit(1);
 });
+
